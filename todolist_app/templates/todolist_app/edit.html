@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Edit task</title>
+
+{% endblock title %}
+
+{% block content %}
+<h1>Update task</h1>
+<!-- form start -->
+{% if all_task.manage == request.user %}
+<form method="post" class="row">
+  {% csrf_token %}
+  <label for="exampleInputEmail1" class="label col-lg-2">Task to be Done</label>
+  <input type="text" name="task" class="form-control col-lg-6" id="exampleInputEmail1" aria-describedby="emailHelp"
+    placeholder="{{all_task.task}}" value="{{all_task.task}}">
+  <input type="hidden" name="done" value="{{all_task.done}}">
+  <button type="submit" class="btn btn-primary col-lg-2">Update</button>
+</form>
+{% else %}
+<p>You are authorized user</p>
+{% endif %}
+<br>
+<!-- form end -->
+{% endblock content %}

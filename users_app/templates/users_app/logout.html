@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Logout</title>
+{% endblock title %}
+
+{% block content %}
+<h2>Thank you</h2>
+<h4>on Taskmate</h4>
+<div class="container">
+  thank you for using
+  <a href="{% url 'login' %}">Login again</a>
+</div>
+{% endblock content %}

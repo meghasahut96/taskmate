@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>taskmate</title>
+{% endblock title %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Success</strong>{{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+<h1>taskmate</h1>
+<!-- form start -->
+<form method="post" class="row">
+  {% csrf_token %}
+  <label for="exampleInputEmail1" class="label col-lg-2">Task to be Done</label>
+  <input type="text" name="task" class="form-control col-lg-6" id="exampleInputEmail1" aria-describedby="emailHelp"
+    placeholder="todo list">
+  <button type="submit" class="btn btn-primary col-lg-2">Submit</button>
+</form>
+<br>
+<!-- form end -->
+<!-- table -->
+<table class="table table-dark text-center">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">task</th>
+      <th scope="col">done</th>
+      <th scope="col">edit</th>
+      <th scope="col">delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if all_task %}
+    {% for task in all_task %}
+    {% if task.done %}
+    <tr class="table-success">
+      <th scope="row">{{forloop.counter}}</th>
+      <del style="color: black;">
+        <td><del>{{task.task}}</td>
+      </del>
+      <td><a style="text-decoration: none;" href="{% url 'pending_task' task.id %}"><button type="button"
+            class="btn btn-secondary">completed</button></a></td>
+      <td><a style="text-decoration: none;" href="{% url 'edit_task' task.id %}"><button type="button"
+            class="btn btn-success">Edit</button></a></td>
+      <td><a style="text-decoration: none;" href="{% url 'delete_task' task.id %}"><button type="button"
+            class="btn btn-danger">Delete</button></a></td>
+    </tr>
+    {% else %}
+
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{task.task}}</td>
+      <td><a style="text-decoration: none;" href="{% url 'complete_task' task.id %}"><button type="button"
+            class="btn btn-secondary">Not completed</button></a></td>
+      <td><a style="text-decoration: none;" href="{% url 'edit_task' task.id %}"><button type="button"
+            class="btn btn-success">Edit</button></a></td>
+      <td><a href="{% url 'delete_task' task.id %}"><button type="button" class="btn btn-danger">Delete</button></a>
+      </td>
+    </tr>
+    {% endif %}
+
+    {% endfor %}
+    {% else %}
+    <h1>No task added</h1>
+    {% endif %}
+  </tbody>
+</table>
+
+<!-- pagination -->
+<nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item"><span class="page-link" href="?pg=1">First</span></li>
+    {% if all_task.has_previous %}
+    <li class="page-item"><a class="page-link" href="#">{{all_task.previous_page_number}}</a></li>
+    {% endif %}
+    <li class="page-item"><a class="page-link" href="?pg={{all_task.number}}">{{all_task.number}}</a></li>
+    {% if all_task.has_next %}
+    <li class="page-item"><a class="page-link" href="#">{{all_task.next_page_number}}</a></li>
+    {% endif %}
+    <li class="page-item"><a class="page-link" href="?pg={{all_task.paginator.num_pages}}">Last</a></li>
+  </ul>
+</nav>
+<!-- pagination over -->
+{% endblock content %}
